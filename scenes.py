@@ -9,16 +9,12 @@ class Scene:
         self.sprites = pg.sprite.Group()
         self.entity = []
         self.entity.append(Entity([self.sprites]))
-        self.entity.append(Entity([self.sprites],position=(600,100)))
         self.entity.append(Entity([self.sprites],position=(200,200)))
 
         self.ship = Ship([self.sprites],position = (SCREENWIDTH/2-TILE_SIZE/2,SCREENHEIGHT/2-300))
 
     def update(self):
         self.sprites.update()
-        for entitites in self.entity:
-            a = entitites.check_collisions(ship=self.ship)
-            print(a)
         
     def draw(self):
         self.game.screen.fill(BACKGROUND_COLOR)

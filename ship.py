@@ -13,7 +13,7 @@ class Ship(pg.sprite.Sprite):
         self.move()
 
     def move_right(self):
-        self.rect.x += 2
+        self.rect.x += 1
     def move_left(self):
         self.rect.x -= 1
     def move_up(self):

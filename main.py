@@ -29,8 +29,17 @@ class Game:
 
         self.scene.update()
 
+        self.collisions()
+
         pg.display.update()
         self.clock.tick(FPS)
+
+    def collisions(self):
+        entity = self.scene.entity
+        ship = self.scene.ship
+        for entities in entity:
+            if entities.check_collisions(ship=ship):
+                self.close()
 
     def draw(self):
         self.scene.draw()
