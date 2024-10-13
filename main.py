@@ -4,6 +4,7 @@ import pickle
 
 import sys
 from globals import *
+from scenes import Scene
 
 class Game:
     def __init__(self):
@@ -12,6 +13,7 @@ class Game:
         self.clock = pg.time.Clock()
 
         self.running = True
+        self.scene = Scene(self)
     
     def run(self):
 
@@ -24,11 +26,14 @@ class Game:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.running = False
+
+        self.scene.update()
+
         pg.display.update()
         self.clock.tick(FPS)
 
     def draw(self):
-        self.screen.fill('red')
+        self.scene.draw()
 
     def close(self):
         pg.quit()
