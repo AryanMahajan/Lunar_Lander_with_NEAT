@@ -2,7 +2,7 @@ import pygame as pg
 from globals import *
 
 class Ship(pg.sprite.Sprite):
-    def __init__(self, groups, image = pg.Surface((TILE_SIZE,TILE_SIZE)), position = (0,0)):
+    def __init__(self, groups, image = pg.Surface((TILE_SIZE,TILE_SIZE)), position = (SCREENWIDTH/2-TILE_SIZE/2,SCREENHEIGHT/2-300)):
         super().__init__(groups)
         self.image = image
         self.image.fill(SHIP_COLOR)
@@ -10,7 +10,6 @@ class Ship(pg.sprite.Sprite):
 
     def update(self):
         self.rect.y += 1
-        self.move()
 
     def move_right(self):
         self.rect.x += 1
@@ -24,13 +23,3 @@ class Ship(pg.sprite.Sprite):
 
     def get_mask(self):
         return pg.mask.from_surface(self.image)
-    
-
-    def move(self):
-        keys = pg.key.get_pressed()
-        if keys[pg.K_d]:
-            self.move_right()
-        if keys[pg.K_a]:
-            self.move_left()
-        if keys[pg.K_w]:
-            self.move_up()
