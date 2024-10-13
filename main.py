@@ -100,10 +100,13 @@ def eval_genomes(genomes, config):
 
             if output[0] > 0.5:
                 ship.move_right()
+                ge[x].fitness += 0.1
             if output[1] > 0.5:
                 ship.move_left()
+                ge[x].fitness += 0.1
             if output[2] > 0.5:
                 ship.move_up()
+                ge[x].fitness += 0.02
 
 
         for ship in ships:
