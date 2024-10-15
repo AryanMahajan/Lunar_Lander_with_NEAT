@@ -44,7 +44,7 @@ class Land(Entity):
 
 
 class Platform(Entity):
-    def __init__(self, groups, image=pg.Surface((TILE_SIZE*2,TILE_SIZE/4)), position = (random.randint(0,SCREENWIDTH-TILE_SIZE),(SCREENHEIGHT-TILE_SIZE*2)+(TILE_SIZE/4)*3)):
+    def __init__(self, groups, image=pg.Surface((TILE_SIZE*2,TILE_SIZE/4)), position = (random.randint(0,(SCREENWIDTH-TILE_SIZE-TILE_SIZE*2)),(SCREENHEIGHT-TILE_SIZE*2)+(TILE_SIZE/4)*3)):
         super().__init__(groups, image, position)
         self.image = image
         self.image.fill('green')

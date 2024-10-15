@@ -6,56 +6,7 @@ import os
 import sys
 from globals import *
 from scenes import Scene
-
-class Game:
-    def __init__(self):
-        pg.init()
-        self.screen = pg.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
-        self.clock = pg.time.Clock()
-
-        self.running = True
-        self.scene = Scene(self)
-    
-
-
-    def update(self):
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                self.running = False
-
-        self.scene.update()
-
-
-        pg.display.update()
-        self.clock.tick(FPS)
-
-    def collisions(self):
-        entity = self.scene.entity
-        ship = self.scene.ship
-        for entities in entity:
-            if entities.check_collisions(ship=ship):
-                self.close()
-
-    def soft_landing_conditions(self):
-        entity_platform = self.scene.entity[1]
-        ship = self.scene.ship
-        if entity_platform.soft_landed(ship=ship):
-            return True
-        return False
-
-    def crash_landing_condition(self):
-        entity_land = self.scene.entity[0]
-        ship = self.scene.ship
-        if entity_land.crash_landed(ship = ship):
-            return True
-        return False
-    
-    def draw(self):
-        self.scene.draw(land=self.scene.entity[0], platform=self.scene.entity[1], ship=self.scene.ship)
-
-    def close(self):
-        pg.quit()
-        sys.exit()
+from game import Game
 
 
 
@@ -80,6 +31,8 @@ def eval_genomes(genomes, config):
 
     clock = pg.time.Clock()
 
+    score = 0
+
     run = True
 
     while run and len(ships) > 0:
@@ -93,7 +46,7 @@ def eval_genomes(genomes, config):
                 break
 
         for x, ship in enumerate(ships):  # give each ship a fitness of 0.1 for each frame it stays alive
-            ge[x].fitness += 0.1
+            ge[x].fitness -= 0.6
             ship.update()
            
             output = nets[x].activate((ship.rect.x, ship.rect.y, land.rect.x, land.rect.y,platform.rect.x, platform.rect.y))
@@ -106,24 +59,26 @@ def eval_genomes(genomes, config):
                 ge[x].fitness += 0.1
             if output[2] > 0.5:
                 ship.move_up()
-                ge[x].fitness += 0.02
+                ge[x].fitness += 0.008
 
 
         for ship in ships:
-                if game.crash_landing_condition():
-                    ge[ships.index(ship)].fitness -= 1
-                    nets.pop(ships.index(ship))
-                    ge.pop(ships.index(ship))
-                    ships.pop(ships.index(ship))
-                if game.soft_landing_conditions():
-                    for genome in ge:
-                        genome.fitness += 5
+            if game.crash_landing_condition() or not game.scene.ship.check_in_display():
+                ge[ships.index(ship)].fitness -= 1
+                nets.pop(ships.index(ship))
+                ge.pop(ships.index(ship))
+                ships.pop(ships.index(ship))
+            if game.soft_landing_conditions() and game.scene.ship.check_in_display():
+                ge[ships.index(ship)].fitness += 1
+                for genome in ge:
+                    genome.fitness += 5
+                score +=1
                     
-        game.draw()
+        game.draw(ships=ships)
         pg.display.flip()
 
 
-        if gen > 25:
+        if score > 25:
             pickle.dump(nets[0],open("best.pickle", "wb"))
             break      
 
@@ -138,7 +93,7 @@ def run(config_file):
     p.add_reporter(neat.StdOutReporter(True))
     stats = neat.StatisticsReporter()
     p.add_reporter(stats)
-    winner = p.run(eval_genomes, 50)
+    winner = p.run(eval_genomes)
 
     print('\nBest genome:\n{!s}'.format(winner))
 

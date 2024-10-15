@@ -16,11 +16,12 @@ class Scene:
     def update(self):
         self.sprites.update()
         
-    def draw(self,land,platform,ship):
+    def draw(self,land,platform,ships):
         self.game.screen.fill(BACKGROUND_COLOR)
         self.sprites.draw(self.game.screen)
     
         # Optionally, you can separately draw the land, platform, and ship if needed
         self.game.screen.blit(land.image, land.rect)
         self.game.screen.blit(platform.image, platform.rect)
-        self.game.screen.blit(ship.image, ship.rect)
+        for ship in ships:
+            self.game.screen.blit(ship.image, ship.rect)
