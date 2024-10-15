@@ -28,8 +28,8 @@ Perform soft landings for optimal fitness.
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your_username/lunar-lander-neat.git
-cd lunar-lander-neat
+git clone https://github.com/AryanMahajan/Lunar_Lander_with_NEAT.git
+cd Lunar_Lander_with_NEAT
 ```
 2. Ensure Pygame and NEAT-Python are installed:
 ```bash
