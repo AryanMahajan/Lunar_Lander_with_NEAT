@@ -63,7 +63,7 @@ def eval_genomes(genomes, config):
 
 
         for ship in ships:
-            if game.crash_landing_condition() or not game.scene.ship.check_in_display():
+            if game.crash_landing_condition() or not game.scene.ship.check_in_display() or pg.key.get_pressed()[pg.K_q]:
                 ge[ships.index(ship)].fitness -= 1
                 nets.pop(ships.index(ship))
                 ge.pop(ships.index(ship))
