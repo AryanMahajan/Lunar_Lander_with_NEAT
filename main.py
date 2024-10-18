@@ -69,7 +69,6 @@ def eval_genomes(genomes, config):
                 ge.pop(ships.index(ship))
                 ships.pop(ships.index(ship))
             if game.soft_landing_conditions() and game.scene.ship.check_in_display():
-                ge[ships.index(ship)].fitness += 1
                 for genome in ge:
                     genome.fitness += 5
                 score +=1
