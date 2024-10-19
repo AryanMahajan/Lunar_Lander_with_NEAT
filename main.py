@@ -5,7 +5,6 @@ import os
 
 import sys
 from globals import *
-from scenes import Scene
 from game import Game
 
 
@@ -45,7 +44,7 @@ def eval_genomes(genomes, config):
                 quit()
                 break
 
-        for x, ship in enumerate(ships):  # give each ship a fitness of 0.1 for each frame it stays alive
+        for x, ship in enumerate(ships):
             ge[x].fitness -= 0.6
             ship.update()
            
