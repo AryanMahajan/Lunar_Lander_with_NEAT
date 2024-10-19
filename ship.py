@@ -28,7 +28,7 @@ class Ship(pg.sprite.Sprite):
 #        if keys[pg.K_w]:
 #            self.move_up()
 
-    def on_screen(self) ->bool:
+    def on_screen(self):
         return self.rect.x > 0 and self.rect.x < SCREENWIDTH and self.rect.y >SCREENHEIGHT
 
     def get_mask(self):
