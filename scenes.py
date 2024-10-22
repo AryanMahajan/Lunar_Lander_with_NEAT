@@ -24,5 +24,5 @@ class Scene:
         self.game.screen.blit(land.image, land.rect)
         self.game.screen.blit(platform.image, platform.rect)
         for ship in ships:
-            ship = Ship([self.sprites])
+            #ship = Ship([self.sprites])
             self.game.screen.blit(ship.image, ship.rect)
