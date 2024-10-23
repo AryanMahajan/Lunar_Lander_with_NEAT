@@ -26,7 +26,7 @@ def eval_genomes(genomes, config):
         ge.append(genome)
 
     land = game.scene.entity[0]
-    platform = game.scene.entity[1]
+    platforms = [game.scene.entity[1]]
 
     clock = pg.time.Clock()
 
@@ -48,7 +48,7 @@ def eval_genomes(genomes, config):
             ge[x].fitness -= 0.6
             ship.update()
            
-            output = nets[x].activate((ship.rect.x, ship.rect.y, land.rect.x, land.rect.y,platform.rect.x, platform.rect.y))
+            output = nets[x].activate((ship.rect.x, ship.rect.y, land.rect.x, land.rect.y,platforms[0].rect.x, platforms[0].rect.y))
 
             if output[0] > 0.5:
                 ship.move_right()
@@ -61,22 +61,34 @@ def eval_genomes(genomes, config):
                 ge[x].fitness += 0.008
 
 
-        for ship in ships:
-            if game.crash_landing_condition() or not game.scene.ship.check_in_display() or pg.key.get_pressed()[pg.K_q]:
-                ge[ships.index(ship)].fitness -= 1
-                nets.pop(ships.index(ship))
-                ge.pop(ships.index(ship))
-                ships.pop(ships.index(ship))
-            if game.soft_landing_conditions() and game.scene.ship.check_in_display():
-                for genome in ge:
-                    genome.fitness += 5
-                score +=1
+        rem = []
+        add_platform = False
+        for platform in platforms:
+            # check for collision
+            for ship in ships:
+                if game.crash_landing_condition() or not game.scene.ship.check_in_display() or pg.key.get_pressed()[pg.K_q]:
+                    ge[ships.index(ship)].fitness -= 1
+                    nets.pop(ships.index(ship))
+                    ge.pop(ships.index(ship))
+                    ships.pop(ships.index(ship))
+                    rem.append(platform)
+                if game.soft_landing_conditions():
+                    add_platform = True
+                    print("Soft Landed")
+                
+
+        if add_platform:
+            score += 1
+            # can add this line to give more reward for passing through a platform (not required)
+            for genome in ge:
+                genome.fitness += 10
+            platforms.append(game.scene.entity[1])
                     
         game.draw(ships=ships)
         pg.display.flip()
 
 
-        if score > 25:
+        if score > 25 or pg.key.get_pressed()[pg.K_s]:
             pickle.dump(nets[0],open("best.pickle", "wb"))
             break      
 
